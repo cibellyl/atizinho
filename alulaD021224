@@ -1,0 +1,98 @@
+CREATE DATABASE escola_eventos;
+USE escola_eventos;
+
+-- Tabela de Alunos
+CREATE TABLE tbAluno (
+    matricula_aluno INT PRIMARY KEY,
+    nome_aluno VARCHAR(100),
+    serie_aluno VARCHAR(20)
+);
+
+-- Tabela de Professores
+CREATE TABLE tbProfessor (
+    matricula_professor INT PRIMARY KEY,
+    nome_professor VARCHAR(100),
+    disciplina VARCHAR(50)
+);
+
+-- Tabela de Eventos
+CREATE TABLE tbEvento (
+    id_evento INT PRIMARY KEY AUTO_INCREMENT,
+    nome_evento VARCHAR(100),
+    data_evento DATE
+);
+
+-- Tabela de Participação
+CREATE TABLE tbParticipacao (
+    id_participacao INT PRIMARY KEY AUTO_INCREMENT,
+    id_evento_FK INT,
+    matricula_aluno_FK INT,
+    matricula_professor_FK INT,
+    FOREIGN KEY (id_evento_FK) REFERENCES tbEvento(id_evento),
+    FOREIGN KEY (matricula_aluno_FK) REFERENCES tbAluno(matricula_aluno),
+    FOREIGN KEY (matricula_professor_FK) REFERENCES tbProfessor(matricula_professor)
+);
+
+-- Inserir Alunos
+INSERT INTO tbAluno (matricula_aluno, nome_aluno, serie_aluno)
+VALUES 
+(1, 'João Silva', '1º ano'),
+(2, 'Ana Clara', '2º ano'),
+(3, 'Lucas Pereira', '3º ano');
+
+-- Inserir Professores
+INSERT INTO tbProfessor (matricula_professor, nome_professor, disciplina)
+VALUES 
+(1, 'Geanilson', 'Matemática'),
+(2, 'Bruno BO', 'Filosofia'),
+(3, 'Natália', 'Português');
+
+-- Inserir Eventos
+INSERT INTO tbEvento (nome_evento, data_evento)
+VALUES 
+('SICOOPES', '2024-09-20'),
+('SICAT', '2024-12-10');
+
+-- Inserir Participações
+INSERT INTO tbParticipacao (id_evento_FK, matricula_aluno_FK, matricula_professor_FK)
+VALUES 
+(1, 1, 1),
+(1, 2, NULL),
+(2, 3, 2),
+(2, NULL, 3);
+
+//01- inner join
+select a.nome_aluno,e.nome_evento
+from tbAluno a
+inner join tbParticipacao p on a.matricula_aluno = p.matricula_aluno_FK
+inner join tbEvento e on p.id_evento_FK = e.id_evento;
+
+//02- left join
+select a.nome_aluno,e.nome_evento
+from tbAluno a
+left join tbParticipacao p on a.matricula_aluno = p.matricula_aluno_FK
+left join tbEvento e on p.id_evento_FK = e.id_evento;
+
+//03- left join
+select f.nome_professor,e.nome_evento
+from tbProfessor f
+left join tbParticipacao p on f.matricula_professor = p.matricula_professor_FK
+left join tbEvento e on p.id_evento_FK = e.id_evento;
+
+//04- right join
+select f.nome_professor,e.nome_evento
+from tbProfessor f
+right join tbParticipacao p on f.matricula_professor = p.matricula_professor_FK
+right join tbEvento e on p.id_evento_FK = e.id_evento;
+
+//05- left join
+select f.nome_professor,e.nome_evento
+from tbProfessor f
+left join tbParticipacao p on f.matricula_professor = p.matricula_professor_FK
+left join tbEvento e on p.id_evento_FK = e.id_evento;
+
+//05- right join
+select f.nome_professor,e.nome_evento
+from tbProfessor f
+right join tbParticipacao p on f.matricula_professor = p.matricula_professor_FK
+right join tbEvento e on p.id_evento_FK = e.id_evento;
